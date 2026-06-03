@@ -3,7 +3,6 @@ from typing import Optional
 import httpx
 
 from app.schemas.media import TrackListResponse, TrackResponse
-from app.core.exceptions import SearchException
 from app.services.youtube.client import innertube_post
 from app.services.youtube.parsers import (
     extract_continuation_token,
@@ -16,7 +15,9 @@ async def search_youtube(
     client: httpx.AsyncClient,
     continuation_token: Optional[str] = None,
 ) -> TrackListResponse:
-    payload = {"continuation": continuation_token} if continuation_token else {"query": query}
+    payload = (
+        {"continuation": continuation_token} if continuation_token else {"query": query}
+    )
 
     data = await innertube_post("search", payload, client=client)
 
@@ -47,7 +48,7 @@ def _parse_search_results(data: dict) -> tuple[list[TrackResponse], Optional[str
         token = extract_continuation_token(section)
         if token:
             continuation_token = token
-            
+
     return videos, continuation_token
 
 
@@ -63,7 +64,9 @@ def _get_contents(data: dict) -> list:
         return contents
 
     for cmd in data.get("onResponseReceivedCommands", []):
-        items = cmd.get("appendContinuationItemsAction", {}).get("continuationItems", [])
+        items = cmd.get("appendContinuationItemsAction", {}).get(
+            "continuationItems", []
+        )
         if items:
             return items
 

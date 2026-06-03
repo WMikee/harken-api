@@ -19,7 +19,7 @@ def _build_ydl_opts() -> dict:
 
 
 def _extract_info_sync(url: str) -> dict[str, Any]:
-    with yt_dlp.YoutubeDL(_build_ydl_opts()) as ydl: # type: ignore
+    with yt_dlp.YoutubeDL(_build_ydl_opts()) as ydl:  # type: ignore
         try:
             info = ydl.extract_info(url, download=False)
         except yt_dlp.utils.DownloadError as e:

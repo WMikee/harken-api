@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 import httpx
 
 from app.core.config import settings
-from app.routers import resolve, search, recommendations
+from app.routers import resolve, search
 
 from app.services.youtube import client as youtube_client
 
@@ -28,7 +28,6 @@ app.add_middleware(
 
 app.include_router(resolve.router)
 app.include_router(search.router)
-app.include_router(recommendations.router)
 
 
 @app.get("/health")
